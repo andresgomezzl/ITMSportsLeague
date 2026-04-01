@@ -93,4 +93,49 @@ public class SponsorController : ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
+
+    // POST api/Sponsor/{id}/tournaments - Vincula un sponsor a un torneo
+    [HttpPost("{id}/tournaments")]
+    public async Task<ActionResult<TournamentSponsorResponseDTO>> LinkToTournament(int id, TournamentSponsorRequestDTO dto)
+    {
+        try
+        {
+            // id path es sponsorId para claridad
+            var created = await _sponsorService.LinkSponsorToTournamentAsync(dto.TournamentId, id, dto.ContractAmount);
+            var response = _mapper.Map<TournamentSponsorResponseDTO>(created);
+            return CreatedAtAction(nameof(GetById), new { id = id }, response);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
+    }
+
+    // GET api/Sponsor/{id}/tournaments - Lista los torneos vinculados a un sponsor
+    [HttpGet("{id}/tournaments")]
+    public async Task<ActionResult<IEnumerable<TournamentSponsorResponseDTO>>> GetTournamentsBySponsor(int id)
+    {
+        var links = await _sponsorService.GetTournamentsBySponsorAsync(id);
+        var dto = _mapper.Map<IEnumerable<TournamentSponsorResponseDTO>>(links);
+        return Ok(dto);
+    }
+
+    // DELETE api/Sponsor/{id}/tournaments/{tournamentId} - Desvincula sponsor de torneo
+    [HttpDelete("{id}/tournaments/{tournamentId}")]
+    public async Task<ActionResult> UnlinkFromTournament(int id, int tournamentId)
+    {
+        try
+        {
+            await _sponsorService.UnlinkSponsorFromTournamentAsync(tournamentId, id);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
 }

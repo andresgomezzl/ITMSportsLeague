@@ -20,6 +20,7 @@ builder.Services.AddScoped<IRefereeRepository, RefereeRepository>();           /
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();     // NUEVO
 builder.Services.AddScoped<ITournamentTeamRepository, TournamentTeamRepository>(); // NUEVO
 builder.Services.AddScoped<ISponsorRepository, SponsorRepository>();
+builder.Services.AddScoped<ITournamentSponsorRepository, TournamentSponsorRepository>();
 
 
 // ── Services ──
