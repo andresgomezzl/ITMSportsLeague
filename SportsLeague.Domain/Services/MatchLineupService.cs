@@ -27,11 +27,11 @@ public class MatchLineupService : IMatchLineupService
 
     public async Task<MatchLineup> RegisterAsync(int matchId, MatchLineup lineup)
     {
-        // V1 + V6: el partido debe existir y estar Scheduled
+        // V1 + V6: el partido debe existir 
         var match = await _matchRepository.GetByIdAsync(matchId);
         if (match == null)
             throw new KeyNotFoundException($"No se encontró el partido con ID {matchId}");
-
+        //V6 El partido debe estar en scheduled  
         if (match.Status != MatchStatus.Scheduled)
             throw new InvalidOperationException("Solo se pueden registrar alineaciones en partidos Scheduled");
 

@@ -72,12 +72,14 @@ public class MappingProfile : Profile
                 opt => opt.MapFrom(src =>
                     src.Player.FirstName + " " + src.Player.LastName));
 
+
+        // MatchLineup mappings
         CreateMap<CreateMatchLineupDTO, MatchLineup>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.MatchId, opt => opt.Ignore())
             .ForMember(dest => dest.Match, opt => opt.Ignore())
             .ForMember(dest => dest.Player, opt => opt.Ignore());
-
+        
         CreateMap<MatchLineup, MatchLineupDTO>()
             .ForMember(dest => dest.PlayerName,
                 opt => opt.MapFrom(src => src.Player.FirstName + " " + src.Player.LastName))
